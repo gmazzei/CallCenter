@@ -2,46 +2,55 @@ package com.almundo.model;
 
 import java.util.concurrent.BlockingQueue;
 
+import org.apache.log4j.Logger;
+
 public class Producer implements Runnable {
 	
-	private final BlockingQueue<Call> buffer;
-	private Integer callCounter;
+	private static Logger log = Logger.getLogger(Producer.class);
+	private static final int TIME_BETWEEN_CALLS = 3000;
 	
-	public Producer(BlockingQueue<Call> buffer) {
-		this.buffer = buffer;
-		this.callCounter = 0;
+	private BlockingQueue<Call> callQueue;
+	private Integer callIdCounter;
+	
+	public Producer(BlockingQueue<Call> callQueue) {
+		this.callQueue = callQueue;
+		this.callIdCounter = 0;
 	}
 
 	public void run() {
 		while (true) {
 			Call call = generateCall();
 			addCall(call);
-			waitSomeTime();
+			waitFakeTime();
 		}
 	}
 	
 	
 	private void addCall(Call call) {
-		System.out.println("Productor - Call " + call.getId() + " - Agregando - Tiempo: " + call.getTime());
-		boolean isAccepted = buffer.offer(call);
+		log.debug("Producer - Call " + call.getId() + " has arrived");
+		boolean isAccepted = callQueue.offer(call);
 		
 		if (isAccepted) {
-			System.out.println("Productor - Call " + call.getId() + " - Agregada");
+			log.debug("Producer - Call " + call.getId() + " has been added to the queue");
 		} else {
-			System.out.println("Productor - Call " + call.getId() + " - Rechazada");
+			log.debug("Producer - Call " + call.getId() + " has been rejected - Queue is full");
 		}
 	}
 	
 	
 	private Call generateCall() {
-		Integer id = callCounter++;
-		Integer time = Double.valueOf((Math.random() * 5000 + 5000)).intValue();
-		return new Call(id, time);
+		Integer id = callIdCounter++;
+		return new Call(id);
 	}
 	
-	private void waitSomeTime() {
+
+	
+	/**
+	 * Fake time between calls.
+	 */
+	private void waitFakeTime() {
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(TIME_BETWEEN_CALLS);
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}

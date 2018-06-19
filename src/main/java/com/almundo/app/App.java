@@ -10,13 +10,13 @@ import com.almundo.model.Producer;
 
 public class App {
 	
-	private static final int BUFFER_MAX_SIZE = 10;
+	private static final int CALL_QUEUE_MAX_SIZE = 10;
 	
     public static void main(String[] args) {
-    	BlockingQueue<Call> buffer = new ArrayBlockingQueue<Call>(BUFFER_MAX_SIZE, true);
+    	BlockingQueue<Call> callQueue = new ArrayBlockingQueue<Call>(CALL_QUEUE_MAX_SIZE, true);
     	
-    	Producer producer = new Producer(buffer);
-    	Dispatcher dispatcher = new Dispatcher(buffer);
+    	Producer producer = new Producer(callQueue);
+    	Dispatcher dispatcher = new Dispatcher(callQueue);
     	new Thread(producer).start();
     	new Thread(dispatcher).start();
     }

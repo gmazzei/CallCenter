@@ -8,9 +8,13 @@ public class Call {
 	private final Integer time;
 	
 	
-	public Call(Integer id, Integer time) {
+	public Call(Integer id) {
 		this.id = id;
-		this.time = time;
+		this.time = generateRandomTime();
+	}
+	
+	private Integer generateRandomTime() {
+		return Double.valueOf((Math.random() * 5000 + 5000)).intValue();
 	}
 	
 	public Integer getId() {
