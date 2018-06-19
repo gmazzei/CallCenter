@@ -4,7 +4,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import com.almundo.model.Call;
-import com.almundo.model.Consumer;
+import com.almundo.model.Dispatcher;
 import com.almundo.model.Producer;
 
 
@@ -16,8 +16,8 @@ public class App {
     	BlockingQueue<Call> buffer = new ArrayBlockingQueue<Call>(BUFFER_MAX_SIZE, true);
     	
     	Producer producer = new Producer(buffer);
-    	Consumer consumer = new Consumer(buffer);
+    	Dispatcher dispatcher = new Dispatcher(buffer);
     	new Thread(producer).start();
-    	new Thread(consumer).start();
+    	new Thread(dispatcher).start();
     }
 }
