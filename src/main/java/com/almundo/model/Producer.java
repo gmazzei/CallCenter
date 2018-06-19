@@ -35,7 +35,7 @@ public class Producer implements Runnable {
 	
 	private Call generateCall() {
 		Integer id = callCounter++;
-		Integer time = Double.valueOf((Math.random() * 5 + 5)).intValue();
+		Integer time = Double.valueOf((Math.random() * 5000 + 5000)).intValue();
 		return new Call(id, time);
 	}
 	
