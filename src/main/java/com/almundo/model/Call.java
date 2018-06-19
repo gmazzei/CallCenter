@@ -2,7 +2,6 @@ package com.almundo.model;
 
 public class Call {
 	
-	/* Call time in seconds */
 	private final Integer id;
 	private final Integer time; 
 	
