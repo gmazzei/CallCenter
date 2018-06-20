@@ -1,9 +1,9 @@
 package com.almundo.model;
 
-public class Operator extends Employee {
+public class Operator implements Position {
 
-	public Operator(Integer id) {
-		super(id);
+	public String getName() {
+		return "Operator";
 	}
-	
+
 }

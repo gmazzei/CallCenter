@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 public class Producer implements Runnable {
 	
 	private static Logger log = Logger.getLogger(Producer.class);
-	private static final int TIME_BETWEEN_CALLS = 3000;
 	
 	private BlockingQueue<Call> callQueue;
 	private Integer callIdCounter;
@@ -46,11 +45,12 @@ public class Producer implements Runnable {
 
 	
 	/**
-	 * Fake time between calls.
+	 * Fake time between calls (1 to 3 seconds).
 	 */
 	private void waitFakeTime() {
 		try {
-			Thread.sleep(TIME_BETWEEN_CALLS);
+			Integer time = Double.valueOf((Math.random() * 2000 + 1000)).intValue();
+			Thread.sleep(time);
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}

@@ -2,59 +2,80 @@ package com.almundo.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import org.apache.log4j.Logger;
 
 public class Dispatcher implements Runnable {
 	
 	private static final int NUMBERS_OF_TASKS = 10;
-	private static final int NUMBERS_OF_OPERATORS = 3;
-	private static final int NUMBERS_OF_SUPERVISORS = 2;
+	private static final int NUMBERS_OF_OPERATORS = 6;
+	private static final int NUMBERS_OF_SUPERVISORS = 3;
 	private static final int NUMBERS_OF_DIRECTORS = 1;
 	
 	private final BlockingQueue<Call> callQueue;
-	private final BlockingQueue<Operator> operators;
-	private final BlockingQueue<Supervisor> supervisors;
-	private final BlockingQueue<Director> directors;
+	private final BlockingQueue<Employee> operators;
+	private final BlockingQueue<Employee> supervisors;
+	private final BlockingQueue<Employee> directors;
 	
 	public Dispatcher(BlockingQueue<Call> callQueue) {
 		this.callQueue = callQueue;
-		this.operators = new ArrayBlockingQueue<Operator>(NUMBERS_OF_OPERATORS, true, createOperators());
-		this.supervisors = new ArrayBlockingQueue<Supervisor>(NUMBERS_OF_SUPERVISORS, true, createSupervisors());
-		this.directors = new ArrayBlockingQueue<Director>(NUMBERS_OF_DIRECTORS, true, createDirectors());
+		this.operators = createOperatorsQueue();
+		this.supervisors = createSupervisorsQueue();
+		this.directors = createDirectorsQueue();
+	}
+	
+	
+	private BlockingQueue<Employee> createOperatorsQueue() {
+		
+		BlockingQueue<Employee> queue = new ArrayBlockingQueue<Employee>(NUMBERS_OF_OPERATORS, true);
+		Position position = new Operator();
+		
+		List<Employee> operators = new ArrayList<Employee>();
+		for (Integer i = 0; i < NUMBERS_OF_OPERATORS; i++) {
+			operators.add(new Employee(i, position, queue));
+		}
+		
+		queue.addAll(operators);
+		
+		return queue;
+	}
+	
+	private BlockingQueue<Employee> createSupervisorsQueue() {
+			
+		BlockingQueue<Employee> queue = new ArrayBlockingQueue<Employee>(NUMBERS_OF_SUPERVISORS, true);
+		Position position = new Supervisor();
+		
+		List<Employee> supervisors = new ArrayList<Employee>();
+		for (Integer i = 0; i < NUMBERS_OF_SUPERVISORS; i++) {
+			supervisors.add(new Employee(i, position, queue));
+		}
+		
+		queue.addAll(supervisors);
+		
+		return queue;
+	}
+	
+	private BlockingQueue<Employee> createDirectorsQueue() {
+		
+		BlockingQueue<Employee> queue = new ArrayBlockingQueue<Employee>(NUMBERS_OF_DIRECTORS, true);
+		Position position = new Director();
+		
+		List<Employee> directors = new ArrayList<Employee>();
+		for (Integer i = 0; i < NUMBERS_OF_DIRECTORS; i++) {
+			directors.add(new Employee(i, position, queue));
+		}
+		
+		queue.addAll(directors);
+		
+		return queue;
 	}
 	
 	
 	public void run() {
 		createTasks();
 	}
-	
-	private List<Operator> createOperators() {
-		List<Operator> operators = new ArrayList<Operator>();
-		for (int i = 0; i < NUMBERS_OF_OPERATORS; i++) {
-			operators.add(new Operator(i));
-		}
-		return operators;
-	}
-	
-	private List<Supervisor> createSupervisors() {
-		List<Supervisor> supervisors = new ArrayList<Supervisor>();
-		for (int i = 0; i < NUMBERS_OF_SUPERVISORS; i++) {
-			supervisors.add(new Supervisor(i));
-		}
-		return supervisors;
-	}
-	
-	private List<Director> createDirectors() {
-		List<Director> directors = new ArrayList<Director>();
-		for (int i = 0; i < NUMBERS_OF_DIRECTORS; i++) {
-			directors.add(new Director(i));
-		}
-		return directors;
-	}
+
 	
 	private void createTasks() {
 		for (int i = 0; i < NUMBERS_OF_TASKS; i++) {
@@ -78,7 +99,7 @@ public class Dispatcher implements Runnable {
 			if (isEmployeeAvailable && isCallWaiting) {
 				 employee = getAvailableEmployee();
 				 call = getWaitingCall();
-			}			
+			}
 		}
 		
 		if (isEmployeeAvailable && isCallWaiting) {
@@ -116,13 +137,8 @@ public class Dispatcher implements Runnable {
 	}
 	
 	private void putEmployee(Employee employee) {
-		if (employee instanceof Operator) {
-			this.operators.offer((Operator) employee);
-		} else if (employee instanceof Supervisor) {
-			this.supervisors.offer((Supervisor) employee);
-		} else {
-			this.directors.offer((Director) employee);
-		}
+		BlockingQueue<Employee> queue = employee.getOwnQueue();
+		queue.offer(employee);
 	}
 	
 	private class DispatcherTask implements Runnable {

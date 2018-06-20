@@ -1,9 +1,9 @@
 package com.almundo.model;
 
-public class Director extends Employee {
+public class Director implements Position {
 
-	public Director(Integer id) {
-		super(id);
+	public String getName() {
+		return "Director";
 	}
-	
+
 }
