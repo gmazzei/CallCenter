@@ -50,3 +50,14 @@ Cada empleado tiene un ID, un puesto y conoce su cola, para que el dispatcher no
 Para modelar a los empleados, se eligió composición en vez de herencia. A pesar de que esta última parecía más natural, no representaba mucha utilidad al momento de códificar el Dispatcher. Como todos los empleados son iguales, la opción más simple es que el puesto sea sólo un String o bien, un objeto que de interfaz "Puesto", por si en el futuro se quiere agregar más funcionalidad relativa al mismo. Esto puede verse como un patrón Strategy, si se le agregara más funcionalidad.
 
 <br/><br/>
+## Decisiones de diseño
+
+Al tomar decisiones de diseño y arquitectura, se pensó en estos principios:
+1) Prevenir condiciones de carrera.
+2) Prevenir Deadlocks. 
+3) Administrar con "justicia" los hilos y pedidos (ej: prevenir starvation).
+4) Escribir código lo más entendible posible.
+
+### BlockingQueue
+
+Se eligió la BlockingQueue por ser thread safe, organizar de forma justa las llamadas (FIFO) y elegir un empleado de forma justa (la cola de operadores se administra con FIFO, lo mismo la cola de supervisores y lo mismo directores).
