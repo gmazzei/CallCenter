@@ -42,7 +42,8 @@ public class AppTest extends TestCase {
     	Dispatcher dispatcher = new Dispatcher(callQueue);
     	new Thread(dispatcher).start();
     	
-    	//El número de hilos si o si llegara a 10 en instantes.
+    	// Si todo esta bien, el número de hilos 
+    	// llegara a 10 en instantes.
     	start = System.currentTimeMillis();
     	while (dispatcher.getBusyTasks() < 10) {
     		if (System.currentTimeMillis() - start > timeout) {
