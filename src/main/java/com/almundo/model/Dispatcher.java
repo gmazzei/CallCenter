@@ -18,6 +18,8 @@ public class Dispatcher implements Runnable {
 	private final BlockingQueue<Employee> supervisors;
 	private final BlockingQueue<Employee> directors;
 	
+	private int busyTasks = 0;
+	
 	public Dispatcher(BlockingQueue<Call> callQueue) {
 		this.callQueue = callQueue;
 		this.operators = createOperatorsQueue();
@@ -99,12 +101,17 @@ public class Dispatcher implements Runnable {
 			if (isEmployeeAvailable && isCallWaiting) {
 				 employee = getAvailableEmployee();
 				 call = getWaitingCall();
+				 busyTasks++;
 			}
 		}
 		
 		if (isEmployeeAvailable && isCallWaiting) {
 			employee.answer(call);
 			putEmployee(employee);
+			
+			synchronized (this) {
+				busyTasks--;
+			}
 		}
 		
 	}
@@ -140,6 +147,11 @@ public class Dispatcher implements Runnable {
 		BlockingQueue<Employee> queue = employee.getOwnQueue();
 		queue.offer(employee);
 	}
+	
+	public synchronized int getBusyTasks() {
+		return busyTasks;
+	}
+	
 	
 	private class DispatcherTask implements Runnable {
 		

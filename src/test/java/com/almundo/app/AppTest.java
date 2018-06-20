@@ -1,38 +1,36 @@
 package com.almundo.app;
 
-import junit.framework.Test;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.Timeout;
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+import com.almundo.model.Call;
+import com.almundo.model.Dispatcher;
+import com.almundo.model.Producer;
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
-    }
+
+public class AppTest extends TestCase {
+	
+	private static final int CALL_QUEUE_MAX_SIZE = 10;
+	
+	public void testConcurrentTasks() {
+		BlockingQueue<Call> callQueue = new ArrayBlockingQueue<Call>(CALL_QUEUE_MAX_SIZE, true);
+    	
+    	Producer producer = new Producer(callQueue);
+    	new Thread(producer).start();
+    	
+    	while (callQueue.size() < CALL_QUEUE_MAX_SIZE);
+    	
+    	Dispatcher dispatcher = new Dispatcher(callQueue);
+    	new Thread(dispatcher).start();
+    	
+    	while (dispatcher.getBusyTasks() < 10);
+    	
+    	assertEquals(10, dispatcher.getBusyTasks());
+	}
 }
