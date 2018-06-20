@@ -38,7 +38,7 @@ La [cola de llamadas](https://github.com/gmazzei/CallCenter/blob/master/src/main
 El [Dispatcher](https://github.com/gmazzei/CallCenter/blob/master/src/main/java/com/almundo/model/Dispatcher.java) es uno solo, y ejecuta en su propio hilo al iniciar el call-center. <br/>
 Contiene tres colas: operadores, supervisores y directores. Su tamaño es de 6, 3 y 1 respectivamente (y pueden modificarse).<br/>
 Además, el dispatcher crea 10 hilos que escuchan si llega una llamada a la cola. Si esto sucede, se toma un empleado de la cola, se toma una llamada y se responde la misma. La reserva de un empleado y una llamada tiene que ser ejecutada atómicamente, ya que sino podría reservarse un empleado y tener que encolarlo nuevamente porque otro hilo le quitó la llamada. <br/>
-¿Qué pasa si hay llamada pero no empleado? Simplemente se deja la llamada en la cola de espera hasta que haya algún empleado disponible.<br/>
+¿Qué pasa si hay llamada pero no hay empleado? Simplemente se deja la llamada en la cola de espera hasta que haya algún empleado disponible.<br/>
 El Dispatcher también actualiza un contador de hilos ocupados, para saber cuántos de ellos están gestionando una llamada.
 <br/><br/>
 
