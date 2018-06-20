@@ -35,7 +35,9 @@ La cola de llamadas puede almacenar hasta 10 llamadas. Luego, si se intenta agre
 
 ## Dispatcher
 
-
+El Dispatcher es uno solo, y ejecuta en su propio hilo al iniciar el call-center. <br/>
+Contiene tres colas: operadores, supervisores y directores. Su tamaño es de 6, 3 y 1 respectivamente (y pueden modificarse).<br/>
+Además, el dispatcher crea 10 hilos que escuchan si llega una llamada a la cola. Si esto sucede, se toma un empleado de la cola, se toma una llamada y se responde la misma. La reserva de un empleado y una llamada tiene que ser ejecutada atómicamente, ya que sino podría reservarse un empleado y tener que encolarlo nuevamente porque otro hilo le quitó la llamada. También se mantiene un contador de hilos ocupados para saber cuántos de ellos están gestionando una llamada.
 <br/><br/>
 
 ## Llamadas
@@ -56,7 +58,7 @@ Al tomar decisiones de diseño y arquitectura, se pensó en estos principios:
 1) Prevenir condiciones de carrera.
 2) Prevenir Deadlocks. 
 3) Administrar con justicia los hilos y pedidos (ej: prevenir starvation).
-4) Escribir código lo más entendible posible.
+4) Escribir código expresivo.
 <br/>
 
 ### BlockingQueue
