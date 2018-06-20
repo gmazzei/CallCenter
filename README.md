@@ -55,7 +55,7 @@ Para modelar a los empleados, se eligió composición en vez de herencia. A pesa
 Al tomar decisiones de diseño y arquitectura, se pensó en estos principios:
 1) Prevenir condiciones de carrera.
 2) Prevenir Deadlocks. 
-3) Administrar con "justicia" los hilos y pedidos (ej: prevenir starvation).
+3) Administrar con justicia los hilos y pedidos (ej: prevenir starvation).
 4) Escribir código lo más entendible posible.
 <br/>
 
