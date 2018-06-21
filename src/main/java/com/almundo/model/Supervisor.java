@@ -1,9 +1,12 @@
 package com.almundo.model;
 
-public class Supervisor implements Position {
+import java.util.concurrent.BlockingQueue;
 
-	public String getName() {
-		return "Supervisor";
+public class Supervisor extends Position {
+	
+	public Supervisor(BlockingQueue<Employee> queue) {
+		this.name = "Supervisor";
+		this.queue = queue;
 	}
 
 }

@@ -1,9 +1,12 @@
 package com.almundo.model;
 
-public class Director implements Position {
+import java.util.concurrent.BlockingQueue;
 
-	public String getName() {
-		return "Director";
+public class Director extends Position {
+	
+	public Director(BlockingQueue<Employee> queue) {
+		this.name = "Director";
+		this.queue = queue;
 	}
 
 }

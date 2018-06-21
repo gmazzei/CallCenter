@@ -5,8 +5,12 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import org.apache.log4j.Logger;
+
 
 public class Dispatcher implements Runnable {
+	
+	private static Logger log = Logger.getLogger(Dispatcher.class);
 	
 	private static final int NUMBERS_OF_TASKS = 10;
 	private static final int NUMBERS_OF_OPERATORS = 6;
@@ -31,11 +35,11 @@ public class Dispatcher implements Runnable {
 	private BlockingQueue<Employee> createOperatorsQueue() {
 		
 		BlockingQueue<Employee> queue = new ArrayBlockingQueue<Employee>(NUMBERS_OF_OPERATORS, true);
-		Position position = new Operator();
+		Position position = new Operator(queue);
 		
 		List<Employee> operators = new ArrayList<Employee>();
 		for (Integer i = 0; i < NUMBERS_OF_OPERATORS; i++) {
-			operators.add(new Employee(i, position, queue));
+			operators.add(new Employee(i, position));
 		}
 		
 		queue.addAll(operators);
@@ -46,11 +50,11 @@ public class Dispatcher implements Runnable {
 	private BlockingQueue<Employee> createSupervisorsQueue() {
 			
 		BlockingQueue<Employee> queue = new ArrayBlockingQueue<Employee>(NUMBERS_OF_SUPERVISORS, true);
-		Position position = new Supervisor();
+		Position position = new Supervisor(queue);
 		
 		List<Employee> supervisors = new ArrayList<Employee>();
 		for (Integer i = 0; i < NUMBERS_OF_SUPERVISORS; i++) {
-			supervisors.add(new Employee(i, position, queue));
+			supervisors.add(new Employee(i, position));
 		}
 		
 		queue.addAll(supervisors);
@@ -61,11 +65,11 @@ public class Dispatcher implements Runnable {
 	private BlockingQueue<Employee> createDirectorsQueue() {
 		
 		BlockingQueue<Employee> queue = new ArrayBlockingQueue<Employee>(NUMBERS_OF_DIRECTORS, true);
-		Position position = new Director();
+		Position position = new Director(queue);
 		
 		List<Employee> directors = new ArrayList<Employee>();
 		for (Integer i = 0; i < NUMBERS_OF_DIRECTORS; i++) {
-			directors.add(new Employee(i, position, queue));
+			directors.add(new Employee(i, position));
 		}
 		
 		queue.addAll(directors);
@@ -101,6 +105,7 @@ public class Dispatcher implements Runnable {
 			if (isEmployeeAvailable && isCallWaiting) {
 				 employee = getAvailableEmployee();
 				 call = getWaitingCall();
+				 log.debug("Call " + call.getId() + " has been assigned to " + employee.getName());
 				 busyTasks++;
 			}
 		}
@@ -144,7 +149,7 @@ public class Dispatcher implements Runnable {
 	}
 	
 	private void putEmployee(Employee employee) {
-		BlockingQueue<Employee> queue = employee.getOwnQueue();
+		BlockingQueue<Employee> queue = employee.getPosition().getOwnQueue();
 		queue.offer(employee);
 	}
 	

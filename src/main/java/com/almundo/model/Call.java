@@ -14,7 +14,7 @@ public class Call {
 	}
 	
 	private Integer generateRandomTime() {
-		return Double.valueOf((Math.random() * 5000 + 5000)).intValue();
+		return (int) (Math.random() * 5000 + 5000);
 	}
 	
 	public Integer getId() {

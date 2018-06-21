@@ -30,9 +30,9 @@ public class Producer implements Runnable {
 		boolean isAccepted = callQueue.offer(call);
 		
 		if (isAccepted) {
-			log.debug("Producer - Call " + call.getId() + " has been added to the queue");
+			log.debug("Call " + call.getId() + " has been added to the queue");
 		} else {
-			log.debug("Producer - Call " + call.getId() + " has been rejected - Queue is full");
+			log.debug("Call " + call.getId() + " has been rejected - Queue is full");
 		}
 	}
 	
@@ -49,7 +49,7 @@ public class Producer implements Runnable {
 	 */
 	private void waitFakeTime() {
 		try {
-			Integer time = Double.valueOf((Math.random() * 2000 + 1000)).intValue();
+			Integer time = (int) (Math.random() * 2000 + 1000);
 			Thread.sleep(time);
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);

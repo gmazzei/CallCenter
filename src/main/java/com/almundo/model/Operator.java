@@ -1,9 +1,12 @@
 package com.almundo.model;
 
-public class Operator implements Position {
+import java.util.concurrent.BlockingQueue;
 
-	public String getName() {
-		return "Operator";
+public class Operator extends Position {
+	
+	public Operator(BlockingQueue<Employee> queue) {
+		this.name = "Operator";
+		this.queue = queue;
 	}
 
 }
