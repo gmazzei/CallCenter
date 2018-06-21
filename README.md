@@ -51,7 +51,7 @@ Cada [llamada](https://github.com/gmazzei/CallCenter/blob/master/src/main/java/c
 
 Todos los [empleados](https://github.com/gmazzei/CallCenter/blob/master/src/main/java/com/almundo/model/Employee.java) tienen el mismo comportamiento sin importar su puesto. Es decir, todos atienden llamadas. Quien los diferencia es el Dispatcher al momento de enviarles llamadas.<br/>
 Cada empleado tiene un ID, un puesto y conoce su cola, para que el dispatcher no tenga que analizar qué puesto tiene cuando haya que enviarlo de vuelta a su cola (polimorfismo en vez de ifs).<br/>
-Para modelar a los empleados, se eligió composición en vez de herencia. A pesar de que esta última parecía más natural, no representaba mucha utilidad al momento de codificar el Dispatcher. Como todos los empleados son iguales, la opción más simple es que el puesto sea sólo un String, o bien, un objeto de interfaz [Puesto](https://github.com/gmazzei/CallCenter/blob/master/src/main/java/com/almundo/model/Position.java), por si en el futuro se quiere agregar más funcionalidad relativa al mismo. Esto podría verse como un patrón Strategy, si se le agregara más funcionalidad.<br/>
+Para modelar a los empleados, se eligió composición en vez de herencia. A pesar de que esta última parecía más natural, no representaba mucha utilidad al momento de codificar el Dispatcher. Como todos los empleados son iguales, la opción más simple es que el puesto sea un atributo del empleado. Este atributo es un objeto de clase [Puesto](https://github.com/gmazzei/CallCenter/blob/master/src/main/java/com/almundo/model/Position.java) y tiene comportamiento propio. Esto podría verse parecido un patrón Strategy.<br/>
 <br/>
 
 ## Decisiones de diseño
