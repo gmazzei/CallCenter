@@ -26,7 +26,7 @@ public class Producer implements Runnable {
 	
 	
 	private void addCall(Call call) {
-		log.debug("Producer - Call " + call.getId() + " has arrived");
+		log.debug("Call " + call.getId() + " has arrived");
 		boolean isAccepted = callQueue.offer(call);
 		
 		if (isAccepted) {
