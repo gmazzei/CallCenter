@@ -4,7 +4,7 @@ Ejercicio Técnico para [almundo](https://almundo.com/).
 
 ## Introducción
 
-Este es un proyecto que simula un call center. El sistema puede ser visto como un Productor-consumidor con un buffer intermedio. Tiene las siguientes partes:
+Este es un proyecto que simula un call center. El sistema puede ser visto como un productor-consumidor con un buffer intermedio. Tiene las siguientes partes:
 <br/><br/>
 
 1) Un Productor que genera llamadas y las deposita en una cola de llamadas.
@@ -36,10 +36,10 @@ La [cola de llamadas](https://github.com/gmazzei/CallCenter/blob/master/src/main
 ## Dispatcher
 
 El [Dispatcher](https://github.com/gmazzei/CallCenter/blob/master/src/main/java/com/almundo/model/Dispatcher.java) es uno solo, y ejecuta en su propio hilo al iniciar el call-center. <br/>
-Contiene tres colas: operadores, supervisores y directores. Su tamaño es de 6, 3 y 1 respectivamente (y pueden modificarse).<br/>
-Además, el dispatcher crea 10 hilos que escuchan si llega una llamada a la cola. Si esto sucede, se toma un empleado de la cola, se toma una llamada y se responde la misma. La reserva de un empleado y una llamada tiene que ser ejecutada atómicamente, ya que sino podría reservarse un empleado y tener que encolarlo nuevamente porque otro hilo le quitó la llamada. <br/>
+Contiene tres colas: operadores, supervisores y directores. Sus tamaño son de 6, 3 y 1 respectivamente (y pueden modificarse).<br/>
+Además, el dispatcher crea [10 hilos](https://github.com/gmazzei/CallCenter/blob/master/src/main/java/com/almundo/model/Dispatcher.java#L161) que escuchan si llega una llamada a la cola. Si esto sucede, se toma un empleado de la cola, se toma una llamada y se responde la misma. La reserva de un empleado y una llamada tiene que ser ejecutada [atómicamente](https://github.com/gmazzei/CallCenter/blob/master/src/main/java/com/almundo/model/Dispatcher.java#L101), ya que sino podría reservarse un empleado y tener que encolarlo nuevamente porque otro hilo le quitó la llamada. <br/>
 ¿Qué pasa si hay llamada pero no hay empleado? Simplemente se deja la llamada en la cola de espera hasta que haya algún empleado disponible.<br/>
-El Dispatcher también actualiza un contador de hilos ocupados, para saber cuántos de ellos están gestionando una llamada.
+El Dispatcher también actualiza un [contador de hilos ocupados](https://github.com/gmazzei/CallCenter/blob/master/src/main/java/com/almundo/model/Dispatcher.java#L25), para saber cuántos de ellos están gestionando una llamada.
 <br/><br/>
 
 ## Llamadas
@@ -51,7 +51,7 @@ Cada [llamada](https://github.com/gmazzei/CallCenter/blob/master/src/main/java/c
 
 Todos los [empleados](https://github.com/gmazzei/CallCenter/blob/master/src/main/java/com/almundo/model/Employee.java) tienen el mismo comportamiento sin importar su puesto. Es decir, todos atienden llamadas. Quien los diferencia es el Dispatcher al momento de enviarles llamadas.<br/>
 Cada empleado tiene un ID, un puesto y conoce su cola, para que el dispatcher no tenga que analizar qué puesto tiene cuando haya que enviarlo de vuelta a su cola (polimorfismo en vez de ifs).<br/>
-Para modelar a los empleados, se eligió composición en vez de herencia. A pesar de que esta última parecía más natural, no representaba mucha utilidad al momento de codificar el Dispatcher. Como todos los empleados son iguales, la opción más simple es que el puesto sea un atributo del empleado. Este atributo es un objeto de clase [Puesto](https://github.com/gmazzei/CallCenter/blob/master/src/main/java/com/almundo/model/Position.java) y tiene comportamiento propio. Esto podría verse parecido un patrón Strategy.<br/>
+Para modelar a los empleados, se eligió composición en vez de herencia. A pesar de que esta última parecía más natural, no otorgaba mucha utilidad al momento de codificar el Dispatcher. Como todos los empleados son iguales, la opción más simple es que el puesto sea un atributo del empleado. Este atributo es un objeto de clase [Puesto](https://github.com/gmazzei/CallCenter/blob/master/src/main/java/com/almundo/model/Position.java) y tiene comportamiento propio. Esto podría verse parecido un patrón Strategy.<br/>
 <br/>
 
 ## Decisiones de diseño
@@ -60,9 +60,9 @@ Al tomar decisiones de diseño y arquitectura, se pensó en estos principios:
 1) Prevenir condiciones de carrera.
 2) Prevenir Deadlocks. 
 3) Administrar con justicia los hilos y pedidos (ej: prevenir starvation).
-4) Escribir código expresivo.
+4) Escribir código expresivo y respetar las buenas prácticas.
 <br/>
 
 ### BlockingQueue
 
-Se eligió la [BlockingQueue](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/BlockingQueue.html) por ser thread safe, organizar de forma justa las llamadas (FIFO) y elegir un empleado de forma justa (la cola de operadores se administra con FIFO, lo mismo la cola de supervisores y lo mismo directores).
+Se eligió la [BlockingQueue](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/BlockingQueue.html) por ser thread safe, organizar de forma justa las llamadas (FIFO) y elegir un empleado de forma justa (la colas de operadores, supervisores y directores se administran cada una con FIFO).
