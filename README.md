@@ -65,4 +65,17 @@ Al tomar decisiones de diseño y arquitectura, se pensó en estos principios:
 
 ### BlockingQueue
 
-Se eligió la [BlockingQueue](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/BlockingQueue.html) por ser thread safe, organizar de forma justa las llamadas (FIFO) y elegir un empleado de forma justa (la colas de operadores, supervisores y directores se administran cada una con FIFO).
+Se eligió la [BlockingQueue](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/BlockingQueue.html) por ser thread safe, organizar de forma justa las llamadas (FIFO) y elegir un empleado de forma justa (la colas de operadores, supervisores y directores se administran cada una con FIFO).<br/>
+<br/>
+
+## Pasos para ejecutar
+
+Ejecutar los siguientes comandos:
+
+<pre>
+git clone git@github.com:gmazzei/CallCenter.git
+cd CallCenter
+mvn clean install
+mvn exec:java
+</pre>
+<br/>
