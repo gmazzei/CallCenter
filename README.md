@@ -30,7 +30,7 @@ El [productor](https://github.com/gmazzei/CallCenter/blob/master/src/main/java/c
 
 ## Cola de llamadas
 
-La [cola de llamadas](https://github.com/gmazzei/CallCenter/blob/master/src/main/java/com/almundo/app/App.java#L16) puede almacenar hasta 10 llamadas. Luego, si se intenta agregar una nueva llamada, la misma será rechazada y descartada. Este es un caso excepcional. Si fuera un call center real, tendríamos una grabación que le diría al usuario "Todas nuestras operadoras están ocupadas. Por favor, intente más tarde". Es decir, están todos ocupados y, además, no podemos dejar su llamada en espera porque la cola está llena.
+La [cola de llamadas](https://github.com/gmazzei/CallCenter/blob/master/src/main/java/com/almundo/app/App.java#L16) puede almacenar hasta 10 llamadas. Luego, si se intenta agregar una nueva llamada, la misma será rechazada y descartada. Este es un caso excepcional. Si fuera un call center real, tendríamos una grabación que le diría al usuario <i>"Todas nuestras operadoras están ocupadas. Por favor, intente más tarde"</i>. Es decir, están todos ocupados y, además, no podemos dejar su llamada en espera porque la cola está llena.
 <br/><br/>
 
 ## Dispatcher
