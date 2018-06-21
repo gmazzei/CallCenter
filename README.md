@@ -70,9 +70,11 @@ Se eligió la [BlockingQueue](https://docs.oracle.com/javase/7/docs/api/java/uti
 
 ## Pasos para ejecutar
 
-Clonar el repositorio y dirigirse al directorio principal. Luego ejecutar:
+Ejecutar los siguientes comandos:
 
 <pre>
+git clone git@github.com:gmazzei/CallCenter.git
+cd CallCenter
 mvn clean install
 mvn exec:java
 </pre>
